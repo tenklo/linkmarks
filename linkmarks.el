@@ -53,7 +53,7 @@
       for target in (org-refile-get-targets)
       for element = (progn
                       (goto-char (nth 3 target))
-                      (forward-line)
+                      (org-end-of-meta-data t)
                       (org-element-context))
       for type = (car element)
       for props = (cadr element)
