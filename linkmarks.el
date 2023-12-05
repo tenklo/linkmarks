@@ -70,7 +70,7 @@
           (choices (mapcar 'car targets))
           (choice (completing-read "Bookmark: " choices))
           ((_ link) (-first (lambda (i) (equal (car i) choice)) targets)))
-    (org-open-link-from-string link)))
+    (org-link-open-from-string link)))
 
 ;;;###autoload
 (defun linkmarks-capture ()
