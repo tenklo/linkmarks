@@ -37,9 +37,7 @@
                                  (file . find-file)
                                  (wl . wl-other-frame)))
          (org-refile-use-outline-path t)
-         (org-refile-targets `((,linkmarks-file :maxlevel . 99)))
-         (org-confirm-elisp-link-function nil)
-         (safe-local-variable-values '((org-confirm-elisp-link-function . nil))))
+         (org-refile-targets `((,linkmarks-file :maxlevel . 99))))
      ,@body))
 
 (cl-defun linkmarks--in-file ()
