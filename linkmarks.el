@@ -37,6 +37,7 @@
                                  (file . find-file)
                                  (wl . wl-other-frame)))
          (org-refile-use-outline-path t)
+         (org-agenda-files `(,linkmarks-file))
          (org-refile-targets `((,linkmarks-file :maxlevel . 99))))
      ,@body))
 
