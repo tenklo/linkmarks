@@ -63,13 +63,16 @@
       collect (list (car target) content)))))
 
 ;;;###autoload
-(cl-defun linkmarks-select ()
-  (interactive)
-  (-let* ((targets (linkmarks--in-file))
-          (choices (mapcar 'car targets))
-          (choice (completing-read "Bookmark: " choices))
-          ((_ link) (-first (lambda (i) (equal (car i) choice)) targets)))
-    (org-link-open-from-string link)))
+(cl-defun linkmarks-select (arg)
+  (interactive "P")
+  (if arg
+      (linkmarks--setup
+       (org-refile '(4)))
+    (-let* ((targets (linkmarks--in-file))
+            (choices (mapcar 'car targets))
+            (choice (completing-read "Bookmark: " choices))
+            ((_ link) (-first (lambda (i) (equal (car i) choice)) targets)))
+      (org-link-open-from-string link))))
 
 ;;;###autoload
 (defun linkmarks-capture ()
