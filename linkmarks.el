@@ -37,18 +37,19 @@
    for props = (cadr element)
    for link = (plist-get props :raw-link)
    if (and (equal 'link type) link)
-   collect (list (car target) link)))
+   collect (list (car target) link target)))
 
 ;;;###autoload
 (cl-defun linkmarks-select (arg)
   (interactive "P")
-  (if arg
-      (org-refile '(4))
-    (-let* ((targets (linkmarks--in-file))
-            (choices (mapcar 'car targets))
-            (choice (completing-read "Bookmark: " choices))
-            ((_ link) (-first (lambda (i) (equal (car i) choice)) targets)))
-      (org-link-open-from-string link))))
+  (let* ((targets (linkmarks--in-file))
+         (choice (assoc (completing-read "Bookmark: " (mapcar 'car targets)) targets)))
+    (if (not arg) (org-link-open-from-string (cadr choice))
+      (let ((buffer (find-buffer-visiting (nth 1 (nth 2 choice))))
+            (point (nth 3 (nth 2 choice))))
+        (message "Jumping to Heading \"%s\" in buffer %s at %s" (car choice) buffer point)
+        (pop-to-buffer buffer)
+        (goto-char point)))))
 
 ;;;###autoload
 (defun linkmarks-capture ()
