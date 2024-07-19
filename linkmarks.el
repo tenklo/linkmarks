@@ -22,7 +22,7 @@
   :group 'org)
 
 ;;;###autoload
-(defcustom linkmarks-file (expand-file-name "~/org/bookmarks.org")
+(defcustom linkmarks-file "~/org/bookmarks.org"
   "Define linkmarks file to store your bookmarks in."
   :group 'linkmarks
   :type 'string)
