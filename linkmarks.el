@@ -29,12 +29,6 @@
 
 (cl-defmacro linkmarks--setup (&rest body)
   `(let ((org-outline-path-complete-in-steps nil)
-         (org-link-frame-setup '((elisp . find-file)
-                                 (vm . vm-visit-folder-other-frame)
-                                 (vm-imap . vm-visit-imap-folder-other-frame)
-                                 (gnus . org-gnus-no-new-news)
-                                 (file . find-file)
-                                 (wl . wl-other-frame)))
          (org-refile-use-outline-path t)
          (org-agenda-files `(,linkmarks-file))
          (org-refile-targets `((,linkmarks-file :maxlevel . 99))))
