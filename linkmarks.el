@@ -20,12 +20,6 @@
   "Configuration options for linkmarks."
   :group 'org)
 
-;;;###autoload
-(defcustom linkmarks-file "~/org/bookmarks.org"
-  "Define linkmarks file to store your bookmarks in."
-  :group 'linkmarks
-  :type 'string)
-
 (cl-defun linkmarks--in-file ()
   (cl-loop
    for target in (org-refile-get-targets)
