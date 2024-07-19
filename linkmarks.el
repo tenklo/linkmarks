@@ -26,40 +26,24 @@
   :group 'linkmarks
   :type 'string)
 
-(cl-defmacro linkmarks--setup (&rest body)
-  `(let ((org-outline-path-complete-in-steps nil)
-         (org-refile-use-outline-path t)
-         (org-agenda-files `(,linkmarks-file))
-         (org-refile-targets `((,linkmarks-file :maxlevel . 99))))
-     ,@body))
-
 (cl-defun linkmarks--in-file ()
-  (linkmarks--setup
-   (with-temp-buffer
-     (insert-file-contents linkmarks-file t)
-     (org-mode)
-     (goto-char (point-min))
-     (outline-show-all)
-     (cl-loop
-      for target in (org-refile-get-targets)
-      for element = (progn
-                      (goto-char (nth 3 target))
-                      (org-end-of-meta-data t)
-                      (org-element-context))
-      for type = (car element)
-      for props = (cadr element)
-      for begin = (plist-get props :begin)
-      for end = (plist-get props :end)
-      for content = (buffer-substring begin end)
-      if (equal 'link type)
-      collect (list (car target) content)))))
+  (cl-loop
+   for target in (org-refile-get-targets)
+   for element = (with-current-buffer (find-buffer-visiting (nth 1 target))
+                   (goto-char (nth 3 target))
+                   (org-end-of-meta-data t)
+                   (org-element-context))
+   for type = (car element)
+   for props = (cadr element)
+   for link = (plist-get props :raw-link)
+   if (and (equal 'link type) link)
+   collect (list (car target) link)))
 
 ;;;###autoload
 (cl-defun linkmarks-select (arg)
   (interactive "P")
   (if arg
-      (linkmarks--setup
-       (org-refile '(4)))
+      (org-refile '(4))
     (-let* ((targets (linkmarks--in-file))
             (choices (mapcar 'car targets))
             (choice (completing-read "Bookmark: " choices))
