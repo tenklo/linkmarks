@@ -51,13 +51,6 @@
         (pop-to-buffer buffer)
         (goto-char point)))))
 
-;;;###autoload
-(defun linkmarks-capture ()
-  (interactive)
-  (let ((org-capture-templates '(("t" "Bookmark" entry (file linkmarks-file)
-                                  "* %^{Title}\n[[%?]]\n  added: %U" :kill-buffer t))))
-    (linkmarks--setup
-     (org-capture))))
 
 (provide 'linkmarks)
 
