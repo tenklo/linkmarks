@@ -5,63 +5,42 @@ Linkmarks.el leverages org-mode for bookmarks so you can:
 - Keep your bookmarks in org-mode
 - Organize them any way you want
 - Use *any* supported link type as a bookmark!
-- Use org-capture for new bookmarks.
 - Easily edit bookmarks by hand
 - Export to the web!
 
-* Installation
+This is a fork of [[https://github.com/dustinlacewell/linkmarks][dustinlacewell/linkmarks]] with a simplified interface that integrates with your existing =org-refile-targets= instead of requiring a dedicated bookmarks file.
 
-** el-get
-#+begin_src emacs-lisp
-  (el-get-bundle linkmarks
-    :url "https://github.com/dustinlacewell/linkmarks.git"
-    :features linkmarks)
-#+end_src
+* Installation
 
 ** straight.el
 #+begin_src emacs-lisp
   (use-package linkmarks
-    :straight (linkmarks :type git :host github :repo "dustinlacewell/linkmarks"))
+    :straight (linkmarks :type git :host github :repo "tenklo/linkmarks"))
 #+end_src
 
 * Configuration
 
-The only setting you need to configure is =linkmarks-file=:
+Linkmarks uses your existing =org-refile-targets= to find bookmarks. Any heading in your refile targets that is immediately followed by an org-mode link is treated as a bookmark.
+
+Make sure your =org-refile-targets= include the file(s) where you keep your bookmarks:
 
 #+begin_src emacs-lisp
-  (setq linkmarks-file "~/org/bookmarks.org")
+  (setq org-refile-targets '(("~/org/bookmarks.org" :maxlevel . 99)))
 #+end_src
-
 
 * Usage
 
-** linkmarks-capture
-
-To create a new bookmark, execute =M-x linkmarks-capture= or bind it to key of your
-choice. It will ask for a title, and then allow you to enter in the link data. The
-default template looks like this:
-
-#+begin_src text
-  * Bookmark Title
-  [[link content goes here]]
-    added: [2018-08-30 Thu 03:53]
-#+end_src
-
-Use =C-c C-w= to refile into your bookmarks!
-
 ** linkmarks-select
 
-To select and visit a bookmark, execute =M-x linkmarks-select= or bind it to a key. It
-will prompt you with =completing-read= and visit your selection.
+To select and visit a bookmark, execute =M-x linkmarks-select= or bind it to a key. It will prompt you with =completing-read= and open the selected link.
+
+With a prefix argument (=C-u M-x linkmarks-select=), it will jump to the bookmark's heading in the org file instead of opening the link.
 
 * Bookmark File
 
-Your bookmark file is just a normal org-mode file. The way a bookmark is defined is
-simple enough: Any header followed by a link on the next line is a bookmark.
+Your bookmark file is just a normal org-mode file. The way a bookmark is defined is simple enough: Any heading followed by a link on the next line is a bookmark.
 
-You can nest bookmarks, you can have headings that are purely organizational, you can
-have additional notes or anything else. The only thing that matters are headings
-followed by an org-mode link.
+You can nest bookmarks, you can have headings that are purely organizational, you can have additional notes or anything else. The only thing that matters are headings followed by an org-mode link.
 
 * Examples
 
@@ -90,11 +69,9 @@ As usual, files can be linked to by simply specifying their path:
 
 ** Directories
 
-This is quite useful:
-
 #+begin_src text
-  ,* XDG config home
-  [[elisp:(helm-find-files-1 "~/.config/")]]
+  * XDG config home
+  [[elisp:(dired "~/.config/")]]
 #+end_src
 
 ** Elisp
@@ -105,7 +82,6 @@ You can have bookmarks that run arbitrary elisp!
   * Start Playlist
   [[elisp:(start-playlist (completing-read "playlist" '("rock" "hiphop" "bluegrass")))]]
 #+end_src
-
 
 ** Others
 
