@@ -14,6 +14,7 @@
 ;;; Code:
 (require 'cl-lib)
 (require 'org)
+(require 'org-refile nil t) ; Org >= 9.4: refile code lives in its own file, not loaded by org.el
 
 ;;;###autoload
 (defgroup linkmarks nil
